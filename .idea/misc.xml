@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/LeV/AndroidStudioProjects/Premium/NewsLine/app/src/main/res/drawable-v24/ic_heart.xml" value="0.1245" />
         <entry key="..\:/Users/LeV/AndroidStudioProjects/Premium/NewsLine/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
+        <entry key="..\:/Users/LeV/AndroidStudioProjects/Premium/NewsLine/app/src/main/res/drawable-v24/ic_share.xml" value="0.1245" />
         <entry key="..\:/Users/LeV/AndroidStudioProjects/Premium/NewsLine/app/src/main/res/drawable/ic_favorite.xml" value="0.1" />
         <entry key="..\:/Users/LeV/AndroidStudioProjects/Premium/NewsLine/app/src/main/res/drawable/ic_home.xml" value="0.175" />
         <entry key="..\:/Users/LeV/AndroidStudioProjects/Premium/NewsLine/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
@@ -14,6 +16,7 @@
         <entry key="..\:/Users/LeV/AndroidStudioProjects/Premium/NewsLine/app/src/main/res/layout/fragment_main.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/LeV/AndroidStudioProjects/Premium/NewsLine/app/src/main/res/layout/fragment_search.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/LeV/AndroidStudioProjects/Premium/NewsLine/app/src/main/res/layout/fragment_splash.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/LeV/AndroidStudioProjects/Premium/NewsLine/app/src/main/res/layout/item_article.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/LeV/AndroidStudioProjects/Premium/NewsLine/app/src/main/res/menu/bottom_nav_menu.xml" value="0.20416666666666666" />
       </map>
     </option>
