@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +23,7 @@ class MainFragment : Fragment() {
     lateinit var newsAdapter: NewsAdapter
     private val viewModel by viewModels<MainViewModel>()
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -36,7 +38,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         viewModel.newsLiveData.observe(viewLifecycleOwner) { responce ->
-            when(responce) {
+            when (responce) {
                 is Resource.Success -> {
                     pag_progress_bar.visibility = View.INVISIBLE
                     responce.data?.let {
@@ -44,10 +46,11 @@ class MainFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    pag_progress_bar.visibility = View.INVISIBLE
+                    pag_progress_bar.visibility = View.VISIBLE
                     responce.data?.let {
                         Log.e("checkData", "MainFragment: error: ${it}")
                     }
+                    Toast.makeText(requireContext(), responce.message, Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Loading -> {
                     pag_progress_bar.visibility = View.VISIBLE
