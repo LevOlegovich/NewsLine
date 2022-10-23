@@ -12,7 +12,7 @@ import com.example.newsline.R
 import com.example.newsline.models.Article
 import kotlinx.android.synthetic.main.item_article.view.*
 
-class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
+class SearchNewsAdapter : RecyclerView.Adapter<SearchNewsAdapter.NewsViewHolder>() {
 
     inner class NewsViewHolder(view: View) : RecyclerView.ViewHolder(view)
 

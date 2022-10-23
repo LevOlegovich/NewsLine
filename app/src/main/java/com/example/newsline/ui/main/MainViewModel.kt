@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsline.data.api.NewsRepository
 import com.example.newsline.models.NewsResponse
+import com.example.newsline.utils.Constants
 import com.example.newsline.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -25,10 +26,10 @@ class MainViewModel @Inject constructor(private val repository: NewsRepository) 
     }
 
     init {
-        getNews("ru")
+        getNews(Constants.RU)
     }
 
-    private fun getNews(countryCode: String) {
+    fun getNews(countryCode: String) {
         newsLiveData.postValue(Resource.Loading())
         viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
 
@@ -38,12 +39,11 @@ class MainViewModel @Inject constructor(private val repository: NewsRepository) 
                     newsLiveData.postValue(Resource.Success(res))
                 }
             }
-//            else {
-//                newsLiveData.postValue(Resource.Error(message = response.message()))
-//            }
+            else {
+                newsLiveData.postValue(Resource.Error(message = "Error!!! Code: ${response.code()}"))
+            }
         }
     }
-
 
 
 }

@@ -10,5 +10,6 @@
     <color name="grayBlack">#262627</color>
     <color name="dark_green">#FF374A58</color>
     <color name="teal">#1C728C</color>
+    <color name="red">#C8281D</color>
     <color name="lightGrey">#F2F2F2</color>
 </resources>
