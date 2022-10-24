@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -19,6 +20,7 @@ import com.example.newsline.utils.Constants
 import com.example.newsline.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.item_article.view.*
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
@@ -51,6 +53,23 @@ class MainFragment : Fragment() {
             )
         }
 
+//        viewModel.checkFavoriteLiveData.observe(viewLifecycleOwner) {
+//            when (it) {
+//                is Resource.Success -> {
+//                    if (it.data == true) {
+//                        binding.newsAdapter.forEach { item->
+//                             }.setBackgroundColor(resources.getColor(R.color.red))
+//                    }
+//                    if (it.data == false) {
+//                        binding.iconFavorite.setBackgroundColor(resources.getColor(R.color.white))
+//                    }
+//
+//                }
+//                is Resource.Error -> {
+//                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        }
 
         viewModel.newsLiveData.observe(viewLifecycleOwner) { responce ->
             when (responce) {
@@ -84,11 +103,17 @@ class MainFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        newsAdapter = NewsAdapter()
+        newsAdapter = NewsAdapter { viewModel.getUrlFavoriteEqualsApi() }
         news_adapter.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        //viewModel.favoriteIconCheck()
+
     }
 
 

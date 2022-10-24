@@ -49,13 +49,14 @@ class FavoriteFragment : Fragment() {
             )
         }
 
-
+// Как обновлять список после удаления автоматически?
         viewModel.favoriteNewsLiveData.observe(viewLifecycleOwner) { responce ->
+      //      viewModel.getFavoriteNews()
+
             when (responce) {
                 is Resource.Success -> {
                     pag_progress_bar.visibility = View.INVISIBLE
                     responce.data?.let {
-                        viewModel.getFavoriteNews()
                         newsAdapter.differ.submitList(it)
                     }
                 }
@@ -87,6 +88,12 @@ class FavoriteFragment : Fragment() {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)
         }
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.getFavoriteNews()
     }
 
 }

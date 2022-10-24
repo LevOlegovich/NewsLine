@@ -27,7 +27,7 @@ class FavoriteViewModel @Inject constructor(private val repository: NewsReposito
 
     fun getFavoriteNews() = viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
         favoriteNewsLiveData.postValue(Resource.Loading())
-        val res = repository.getFavoriteArticles()
+        val res = repository.getFavoriteNews()
         println("DB size: ${res.size}")
         //  repository.getFavoriteArticles()
         favoriteNewsLiveData.postValue(Resource.Success(res))

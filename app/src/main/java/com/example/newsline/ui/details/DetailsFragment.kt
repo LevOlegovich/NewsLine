@@ -46,10 +46,11 @@ class DetailsFragment : Fragment() {
             when (it) {
                 is Resource.Success -> {
                     if (it.data == true) {
-                        binding.iconFavorite.setBackgroundColor(resources.getColor(R.color.red))
+                        binding.iconFavorite.setImageResource(R.drawable.favorite_icon)
                     }
                     if (it.data == false) {
-                        binding.iconFavorite.setBackgroundColor(resources.getColor(R.color.white))
+                        binding.iconFavorite.setImageResource(R.drawable.unfavorite_icon)
+
                     }
 
                 }

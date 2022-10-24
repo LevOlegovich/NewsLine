@@ -11,8 +11,12 @@ import com.bumptech.glide.Glide
 import com.example.newsline.R
 import com.example.newsline.models.Article
 import kotlinx.android.synthetic.main.item_article.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
+class NewsAdapter(private val listUrlFavorite: suspend () -> List<String>) :
+    RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
     inner class NewsViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
@@ -44,6 +48,15 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
             article_image.clipToOutline = true
             article_title.text = article.title
             article_date.text = article.publishedAt
+            CoroutineScope(Dispatchers.Main).launch {
+                if (listUrlFavorite.invoke().contains(article.url)) {
+                    holder.itemView.icon_favorite.setImageResource(R.drawable.favorite_icon)
+
+                } else {
+                    holder.itemView.icon_favorite.setImageResource(R.drawable.unfavorite_icon)
+
+                }
+            }
 
 
             setOnClickListener {

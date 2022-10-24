@@ -28,19 +28,19 @@ class DetailsViewModel @Inject constructor(private val repository: NewsRepositor
     }
 
     fun getSavedArticles() = viewModelScope.launch(Dispatchers.IO) {
-        repository.getFavoriteArticles()
+        repository.getFavoriteNews()
     }
 
 
     fun favoriteIconCheck(article: Article) = viewModelScope.launch(Dispatchers.IO) {
-        val data = repository.getFavoriteArticles()
+        val data = repository.getFavoriteNews()
         if (data.filter { it.url == article.url }.size > 0) {
             favoriteLiveData.postValue(Resource.Success(true))
         }
     }
 
     fun saveFavoriteNews(article: Article) = viewModelScope.launch(Dispatchers.IO) {
-        val data = repository.getFavoriteArticles()
+        val data = repository.getFavoriteNews()
 
         Log.d("checkData", "DetailsFragment allFavorites: ${data.size}")
         Log.d("checkData", "DetailsFragment article: $article")
@@ -58,14 +58,14 @@ class DetailsViewModel @Inject constructor(private val repository: NewsRepositor
     }
 
     fun deleteFavoriteNews(article: Article) = viewModelScope.launch(Dispatchers.IO) {
-        val data = repository.getFavoriteArticles()
+        val data = repository.getFavoriteNews()
 
         Log.d("checkData", "DetailsFragment allFavorites before delete: ${data.size}")
         repository.deleteFavoriteNews(data.filter { it.url == article.url }.last())
 
 
         Log.d("checkData",
-            "DetailsFragment allFavorites after delete: ${repository.getFavoriteArticles().size}")
+            "DetailsFragment allFavorites after delete: ${repository.getFavoriteNews().size}")
         favoriteLiveData.postValue(Resource.Success(false))
     }
 
