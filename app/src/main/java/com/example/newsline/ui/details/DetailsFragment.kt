@@ -11,11 +11,12 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.newsline.R
 import com.example.newsline.databinding.FragmentDetailsBinding
+import com.example.newsline.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -40,10 +41,31 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val articleArg = bundleArgs.article
 
+
+        viewModel.favoriteLiveData.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    if (it.data == true) {
+                        binding.iconFavorite.setBackgroundColor(resources.getColor(R.color.red))
+                    }
+                    if (it.data == false) {
+                        binding.iconFavorite.setBackgroundColor(resources.getColor(R.color.white))
+                    }
+
+                }
+                is Resource.Error -> {
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
         articleArg.let { article ->
             article.urlToImage.let {
                 Glide.with(this).load(article.urlToImage).into(binding.headerImage)
             }
+
+            viewModel.favoriteIconCheck(article)
+
             binding.headerImage.clipToOutline = true
             binding.articleDetailsTitle.text = article.title
             binding.articleDetailsDecriptionText.text = article.description
@@ -67,22 +89,28 @@ class DetailsFragment : Fragment() {
                 }
             }
 
+
+
             binding.iconFavorite.setOnClickListener {
-                binding.iconFavorite.setBackgroundColor(resources.getColor(R.color.red))
-                viewModel.saveFavoriteArticle(article)
+                if (viewModel.favoriteLiveData.value?.data == false) {
+                    //  binding.iconFavorite.setBackgroundColor(resources.getColor(R.color.red))
+                    viewModel.saveFavoriteNews(article)
+                }
+                if (viewModel.favoriteLiveData.value?.data == true) {
+                    //  binding.iconFavorite.setBackgroundColor(resources.getColor(R.color.red))
+                    viewModel.deleteFavoriteNews(article)
+                }
 
             }
-            binding.iconBack.setOnClickListener {
 
+            binding.iconBack.setOnClickListener {
+                findNavController().popBackStack()
             }
 
 
         }
 
     }
-
-
-
 
 
 }

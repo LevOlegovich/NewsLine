@@ -1,5 +1,6 @@
 package com.example.newsline.ui.favorite
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -30,6 +31,7 @@ class FavoriteViewModel @Inject constructor(private val repository: NewsReposito
         println("DB size: ${res.size}")
         //  repository.getFavoriteArticles()
         favoriteNewsLiveData.postValue(Resource.Success(res))
+        Log.d("checkData", "FavoriteViewModel data: ${res.size}")
     }
 
 }

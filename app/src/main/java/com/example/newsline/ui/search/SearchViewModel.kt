@@ -1,5 +1,6 @@
 package com.example.newsline.ui.search
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -34,6 +35,7 @@ class SearchViewModel @Inject constructor(private val repository: NewsRepository
             if (response.isSuccessful) {
                 response.body()?.let { res ->
                     searchNewsLiveData.postValue(Resource.Success(res))
+                    Log.d("checkData", "SearchFragment text: ${res.toString()}")
                 }
             }
             else {

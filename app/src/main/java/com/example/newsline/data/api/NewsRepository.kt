@@ -15,6 +15,6 @@ class NewsRepository @Inject constructor(
         newsService.getEverything(query = query, page = pageNumber)
 
     suspend fun getFavoriteArticles() = articleDao.getAllArticles()
-    suspend fun addToFavotrite(article: Article) = articleDao.insert(article = article)
-    suspend fun deleteFromFavotrite(article: Article) = articleDao.delete(article = article)
+    suspend fun addToFavotriteNews(article: Article) = articleDao.insert(article = article)
+    suspend fun deleteFavoriteNews(article: Article) = articleDao.delete(article = article)
 }

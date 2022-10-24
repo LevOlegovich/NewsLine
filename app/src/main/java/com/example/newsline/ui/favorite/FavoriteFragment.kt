@@ -55,6 +55,7 @@ class FavoriteFragment : Fragment() {
                 is Resource.Success -> {
                     pag_progress_bar.visibility = View.INVISIBLE
                     responce.data?.let {
+                        viewModel.getFavoriteNews()
                         newsAdapter.differ.submitList(it)
                     }
                 }
@@ -77,9 +78,6 @@ class FavoriteFragment : Fragment() {
             viewModel.getFavoriteNews()
             refreshLayout.isRefreshing = false
         }
-
-
-
 
     }
 
