@@ -20,11 +20,13 @@
 
     <LinearLayout
         android:id="@+id/article_info"
-        android:layout_width="185dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/article_image"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -50,30 +52,8 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/icon_favorite"
-        android:layout_width="34dp"
-        android:layout_height="84dp"
-        android:clickable="true"
-        android:padding="8dp"
-        android:src="@drawable/ic_unfavorite_icon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView"
-        app:layout_constraintStart_toEndOf="@+id/article_info"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="35dp"
-        android:layout_height="84dp"
-        android:clickable="true"
-        android:padding="8dp"
-        android:src="@drawable/ic_share"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

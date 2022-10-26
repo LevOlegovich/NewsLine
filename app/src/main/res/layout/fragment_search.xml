@@ -47,7 +47,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ed_search"
         tools:itemCount="2"
-        tools:listitem="@layout/item_article" />
+        tools:listitem="@layout/item_article_for_search" />
 
     <ProgressBar
         android:id="@+id/pag_search_progress_bar"

@@ -16,14 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.newsline.R
 import com.example.newsline.databinding.FragmentFavoriteBinding
 import com.example.newsline.ui.adapters.FavoriteNewsAdapter
-import com.example.newsline.ui.adapters.NewsAdapter
 import com.example.newsline.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import okhttp3.internal.notify
 
 @AndroidEntryPoint
 class FavoriteFragment : Fragment() {
@@ -38,7 +33,7 @@ class FavoriteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        // Inflate the layout for this fragment
+
         _binding = FragmentFavoriteBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -47,6 +42,7 @@ class FavoriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         setupSwipeListener(binding.newsAdapter)
+
         newsAdapter.setOnItemClickListener {
             val bundle = bundleOf("article" to it)
             view.findNavController().navigate(
@@ -55,10 +51,7 @@ class FavoriteFragment : Fragment() {
             )
         }
 
-// Как обновлять список после удаления автоматически?
         viewModel.favoriteNewsLiveData.observe(viewLifecycleOwner) { responce ->
-            //      viewModel.getFavoriteNews()
-
             when (responce) {
                 is Resource.Success -> {
                     pag_progress_bar.visibility = View.INVISIBLE
@@ -91,7 +84,6 @@ class FavoriteFragment : Fragment() {
 
     private fun initAdapter() {
         newsAdapter = FavoriteNewsAdapter()
-
         news_adapter.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)
@@ -114,7 +106,7 @@ class FavoriteFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val article = newsAdapter.differ.currentList[viewHolder.adapterPosition]
-                viewModel.delete(article)
+                viewModel.deleteFavoriteNews(article)
             }
         }
         val itemTouchHelper = ItemTouchHelper(callback)

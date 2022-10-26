@@ -108,7 +108,7 @@
             tools:text="Recently, Twitter announced that it has entered into a definitive agreement to be acquired by an entity wholly owned by Musk for $54.20 per share in cash in a transaction valued at nearly $44 billion." />
 
         <Button
-            android:id="@+id/article_details_button"
+            android:id="@+id/visite_site_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"

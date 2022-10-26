@@ -28,16 +28,16 @@ class FavoriteViewModel @Inject constructor(private val repository: NewsReposito
 
     fun getFavoriteNews() = viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
         favoriteNewsLiveData.postValue(Resource.Loading())
-        val res = repository.getFavoriteNews()
-        println("DB size: ${res.size}")
-        //  repository.getFavoriteArticles()
-        favoriteNewsLiveData.postValue(Resource.Success(res))
-        Log.d("checkData", "FavoriteViewModel data: ${res.size}")
+        val data = repository.getFavoriteNews()
+        favoriteNewsLiveData.postValue(Resource.Success(data))
+        Log.d("checkData", "FavoriteViewModel data: ${data.size}")
     }
 
-    fun delete(article: Article) = viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
-        repository.deleteFavoriteNews(article)
-        getFavoriteNews()
-    }
+    fun deleteFavoriteNews(article: Article) =
+        viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
+            repository.deleteFavoriteNews(article)
+            getFavoriteNews()
+        }
+
 
 }

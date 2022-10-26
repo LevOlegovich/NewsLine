@@ -3,7 +3,6 @@ package com.example.newsline.ui.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +32,7 @@ class SearchNewsAdapter : RecyclerView.Adapter<SearchNewsAdapter.NewsViewHolder>
         return NewsViewHolder(
             LayoutInflater
                 .from(parent.context)
-                .inflate(R.layout.item_article, parent, false)
+                .inflate(R.layout.item_article_for_search, parent, false)
         )
     }
 
@@ -50,7 +49,6 @@ class SearchNewsAdapter : RecyclerView.Adapter<SearchNewsAdapter.NewsViewHolder>
                 onItemClickListener?.let { it(article) }
             }
         }
-
 
     }
 

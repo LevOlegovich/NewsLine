@@ -15,9 +15,10 @@ data class Article(
     val publishedAt: String?,
     val title: String?,
     val url: String?,
-    val urlToImage: String?
-) : Serializable
+    val urlToImage: String?,
 
+    var favorite: Boolean = false,
+) : Serializable
 
 
 //@Entity(tableName = "articles")

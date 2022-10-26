@@ -1,6 +1,5 @@
 package com.example.newsline.ui.main
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,15 +11,14 @@ import com.example.newsline.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val repository: NewsRepository) : ViewModel() {
 
     val newsLiveData: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-    val listUrlOfDbCheckedForAdapter: MutableLiveData<List<String>> = MutableLiveData()
 
     var newsPage = 1
     var pageSize = 50
@@ -31,7 +29,6 @@ class MainViewModel @Inject constructor(private val repository: NewsRepository) 
 
     init {
         getNews(Constants.RU)
-
     }
 
     fun getNews(countryCode: String) {
@@ -44,7 +41,9 @@ class MainViewModel @Inject constructor(private val repository: NewsRepository) 
                     pageSize = pageSize,
                     pageNumber = newsPage,
                 )
+
             if (response.isSuccessful) {
+                urlFavoreitesFilterForAdapter(response)
                 response.body().let { res ->
                     newsLiveData.postValue(Resource.Success(res))
                 }
@@ -54,46 +53,30 @@ class MainViewModel @Inject constructor(private val repository: NewsRepository) 
         }
     }
 
-    suspend fun urlFavoreitesFilterForAdapter(): List<String> {
-        var idList = mutableListOf<String>()
-        viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
-            val dataDB = repository.getFavoriteNews()
-            val dataApi = newsLiveData.value?.data?.articles
-            Log.d("checkData", "MainViewModel dataDB: $dataDB")
-
-            Log.d("checkData", "MainViewModel dataApi: $dataApi")
-
-            dataApi?.forEach { article ->
-                if (dataDB.filter { it.url == article.url }.size > 0) {
-                    //checkFavoriteLiveData.postValue(Resource.Success(false))
-                    article.url?.let { idList.add(it) }
-                }
+    private suspend fun urlFavoreitesFilterForAdapter(response: Response<NewsResponse>) {
+        val dataDB = repository.getFavoriteNews()
+        response.body()?.articles?.forEach { article ->
+            if (dataDB.any { it.url == article.url }) {
+                article.favorite = true
             }
-        }.join()
-        Log.d("checkData", "MainViewModel idListOfApiEqualsDb: $idList")
+        }
 
-        return idList
     }
 
-    suspend fun urlFilterForAdapter() {
-        var idList = mutableListOf<String>()
+    fun deleteFavoriteNews(article: Article) =
         viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
-            val dataDB = repository.getFavoriteNews()
-            val dataApi = newsLiveData.value?.data?.articles
-            Log.d("checkData", "MainViewModel dataDB: $dataDB")
+            val data = repository.getFavoriteNews()
+            repository.deleteFavoriteNews(data.filter { it.url == article.url }.last())
 
-            Log.d("checkData", "MainViewModel dataApi: $dataApi")
+        }
 
-            dataApi?.forEach { article ->
-                if (dataDB.filter { it.url == article.url }.size > 0) {
-                    //checkFavoriteLiveData.postValue(Resource.Success(false))
-                    article.url?.let { idList.add(it) }
-                }
-            }
-            listUrlOfDbCheckedForAdapter.postValue(idList)
-        }.join()
-        Log.d("checkData", "MainViewModel idListOfApiEqualsDb: $idList")
+    fun saveFavoriteNews(article: Article) = viewModelScope.launch(Dispatchers.IO) {
+        val data = repository.getFavoriteNews()
+        if (data.none { it.url == article.url }) {
+            repository.addToFavotriteNews(article)
+        }
 
     }
+
 
 }

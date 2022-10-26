@@ -11,7 +11,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.Request
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,10 +23,6 @@ class SearchViewModel @Inject constructor(private val repository: NewsRepository
     }
 
 
-//    init {
-//        getSearchNews("")
-//    }
-
     fun getSearchNews(query: String) =
         viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
             searchNewsLiveData.postValue(Resource.Loading())
@@ -37,8 +32,7 @@ class SearchViewModel @Inject constructor(private val repository: NewsRepository
                     searchNewsLiveData.postValue(Resource.Success(res))
                     Log.d("checkData", "SearchFragment text: ${res.toString()}")
                 }
-            }
-            else {
+            } else {
                 searchNewsLiveData.postValue(Resource.Error(message = "Error!!! Code: ${response.code()}"))
             }
         }

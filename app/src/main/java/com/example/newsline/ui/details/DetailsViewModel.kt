@@ -20,50 +20,31 @@ class DetailsViewModel @Inject constructor(private val repository: NewsRepositor
         MutableLiveData(Resource.Success(false))
 
     private val exeptionHandler = CoroutineExceptionHandler { _, exeption ->
-        favoriteIconCheckLiveData.postValue(Resource.Error(exeption.message))
+
     }
 
-    init {
-        // favoriteIconCheck()
-    }
+    fun saveFavoriteNews(article: Article) =
+        viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
+            val data = repository.getFavoriteNews()
 
-    fun getSavedArticles() = viewModelScope.launch(Dispatchers.IO) {
-        repository.getFavoriteNews()
-    }
+            Log.d("checkData", "DetailsFragment allFavorites add before: ${data.size}")
+            Log.d("checkData", "DetailsFragment article: $article")
 
+            if (data.none { it.url == article.url }) {
+                repository.addToFavotriteNews(article)
+            }
 
-    fun favoriteIconCheck(article: Article) = viewModelScope.launch(Dispatchers.IO) {
-        val data = repository.getFavoriteNews()
-        if (data.filter { it.url == article.url }.size > 0) {
-            favoriteIconCheckLiveData.postValue(Resource.Success(true))
-        }
-    }
-
-    fun saveFavoriteNews(article: Article) = viewModelScope.launch(Dispatchers.IO) {
-        val data = repository.getFavoriteNews()
-
-        Log.d("checkData", "DetailsFragment allFavorites: ${data.size}")
-        Log.d("checkData", "DetailsFragment article: $article")
-
-        val countEquals = data.filter { it.url == article.url }.size
-        if (countEquals == 0) {
-            repository.addToFavotriteNews(article)
-            favoriteIconCheckLiveData.postValue(Resource.Success(true))
         }
 
-    }
+    fun deleteFavoriteNews(article: Article) =
+        viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
+            val data = repository.getFavoriteNews()
+            Log.d("checkData", "DetailsFragment allFavorites before delete: ${data.size}")
 
-    fun deleteFavoriteNews(article: Article) = viewModelScope.launch(Dispatchers.IO) {
-        val data = repository.getFavoriteNews()
-
-        Log.d("checkData", "DetailsFragment allFavorites before delete: ${data.size}")
-        repository.deleteFavoriteNews(data.filter { it.url == article.url }.last())
-
-
-        Log.d("checkData",
-            "DetailsFragment allFavorites after delete: ${repository.getFavoriteNews().size}")
-        favoriteIconCheckLiveData.postValue(Resource.Success(false))
-    }
+            repository.deleteFavoriteNews(data.last { it.url == article.url })
+            Log.d("checkData",
+                "DetailsFragment allFavorites after delete: ${repository.getFavoriteNews().size}")
+        }
 
 
 }
