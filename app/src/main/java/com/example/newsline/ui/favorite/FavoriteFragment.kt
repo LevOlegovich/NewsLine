@@ -10,7 +10,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.newsline.R
 import com.example.newsline.databinding.FragmentFavoriteBinding
 import com.example.newsline.ui.adapters.FavoriteNewsAdapter
@@ -18,6 +20,10 @@ import com.example.newsline.ui.adapters.NewsAdapter
 import com.example.newsline.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.internal.notify
 
 @AndroidEntryPoint
 class FavoriteFragment : Fragment() {
@@ -40,7 +46,7 @@ class FavoriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
-
+        setupSwipeListener(binding.newsAdapter)
         newsAdapter.setOnItemClickListener {
             val bundle = bundleOf("article" to it)
             view.findNavController().navigate(
@@ -51,7 +57,7 @@ class FavoriteFragment : Fragment() {
 
 // Как обновлять список после удаления автоматически?
         viewModel.favoriteNewsLiveData.observe(viewLifecycleOwner) { responce ->
-      //      viewModel.getFavoriteNews()
+            //      viewModel.getFavoriteNews()
 
             when (responce) {
                 is Resource.Success -> {
@@ -80,14 +86,39 @@ class FavoriteFragment : Fragment() {
             refreshLayout.isRefreshing = false
         }
 
+
     }
 
     private fun initAdapter() {
         newsAdapter = FavoriteNewsAdapter()
+
         news_adapter.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)
         }
+    }
+
+    private fun setupSwipeListener(rvShopList: RecyclerView) {
+        val callback = object : ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder,
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val article = newsAdapter.differ.currentList[viewHolder.adapterPosition]
+                viewModel.delete(article)
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(rvShopList)
     }
 
 

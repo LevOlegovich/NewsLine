@@ -4,4 +4,6 @@
     <string name="search">Search</string>
     <string name="description">Description</string>
     <string name="visit_site">Visit site</string>
+    <string name="Saved_news">Saved news</string>
+    <string name="Favorite_news">Favorite news</string>
 </resources>

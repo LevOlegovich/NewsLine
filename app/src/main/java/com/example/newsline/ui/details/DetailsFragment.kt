@@ -18,7 +18,6 @@ import com.example.newsline.R
 import com.example.newsline.databinding.FragmentDetailsBinding
 import com.example.newsline.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 @AndroidEntryPoint
@@ -42,20 +41,16 @@ class DetailsFragment : Fragment() {
         val articleArg = bundleArgs.article
 
 
-        viewModel.favoriteLiveData.observe(viewLifecycleOwner) {
+        viewModel.favoriteIconCheckLiveData.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
                     if (it.data == true) {
-                        binding.iconFavorite.setImageResource(R.drawable.favorite_icon)
+                        binding.iconFavorite.setImageResource(R.drawable.ic_favorite_icon)
                     }
                     if (it.data == false) {
-                        binding.iconFavorite.setImageResource(R.drawable.unfavorite_icon)
+                        binding.iconFavorite.setImageResource(R.drawable.ic_unfavorite_icon)
 
                     }
-
-                }
-                is Resource.Error -> {
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -93,11 +88,11 @@ class DetailsFragment : Fragment() {
 
 
             binding.iconFavorite.setOnClickListener {
-                if (viewModel.favoriteLiveData.value?.data == false) {
+                if (viewModel.favoriteIconCheckLiveData.value?.data == false) {
                     //  binding.iconFavorite.setBackgroundColor(resources.getColor(R.color.red))
                     viewModel.saveFavoriteNews(article)
                 }
-                if (viewModel.favoriteLiveData.value?.data == true) {
+                if (viewModel.favoriteIconCheckLiveData.value?.data == true) {
                     //  binding.iconFavorite.setBackgroundColor(resources.getColor(R.color.red))
                     viewModel.deleteFavoriteNews(article)
                 }

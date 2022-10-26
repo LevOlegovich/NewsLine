@@ -3,7 +3,6 @@ package com.example.newsline.ui.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -44,7 +43,7 @@ class FavoriteNewsAdapter : RecyclerView.Adapter<FavoriteNewsAdapter.NewsViewHol
             article_image.clipToOutline = true
             article_title.text = article.title
             article_date.text = article.publishedAt
-
+            holder.itemView.icon_favorite.setImageResource(R.drawable.ic_favorite_icon)
 
             setOnClickListener {
                 onItemClickListener?.let { it(article) }

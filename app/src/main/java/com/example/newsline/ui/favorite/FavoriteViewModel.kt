@@ -21,6 +21,7 @@ class FavoriteViewModel @Inject constructor(private val repository: NewsReposito
     private val exeptionHandler = CoroutineExceptionHandler { _, exeption ->
         favoriteNewsLiveData.postValue(Resource.Error(exeption.message))
     }
+
     init {
         getFavoriteNews()
     }
@@ -32,6 +33,11 @@ class FavoriteViewModel @Inject constructor(private val repository: NewsReposito
         //  repository.getFavoriteArticles()
         favoriteNewsLiveData.postValue(Resource.Success(res))
         Log.d("checkData", "FavoriteViewModel data: ${res.size}")
+    }
+
+    fun delete(article: Article) = viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
+        repository.deleteFavoriteNews(article)
+        getFavoriteNews()
     }
 
 }

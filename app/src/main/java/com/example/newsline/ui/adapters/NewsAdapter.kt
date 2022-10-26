@@ -3,7 +3,6 @@ package com.example.newsline.ui.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +27,7 @@ class NewsAdapter(private val listUrlFavorite: suspend () -> List<String>) :
         override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
             return oldItem == newItem
         }
+
     }
 
     val differ = AsyncListDiffer(this, callback)
@@ -48,16 +48,24 @@ class NewsAdapter(private val listUrlFavorite: suspend () -> List<String>) :
             article_image.clipToOutline = true
             article_title.text = article.title
             article_date.text = article.publishedAt
+
             CoroutineScope(Dispatchers.Main).launch {
                 if (listUrlFavorite.invoke().contains(article.url)) {
-                    holder.itemView.icon_favorite.setImageResource(R.drawable.favorite_icon)
+                    holder.itemView.icon_favorite.setImageResource(R.drawable.ic_favorite_icon)
 
                 } else {
-                    holder.itemView.icon_favorite.setImageResource(R.drawable.unfavorite_icon)
+                    holder.itemView.icon_favorite.setImageResource(R.drawable.ic_unfavorite_icon)
 
                 }
             }
 
+//            if (listUrlFavorite.contains(article.url)) {
+//                holder.itemView.icon_favorite.setImageResource(R.drawable.ic_favorite_icon)
+//
+//            } else {
+//                holder.itemView.icon_favorite.setImageResource(R.drawable.ic_unfavorite_icon)
+//
+//            }
 
             setOnClickListener {
                 onItemClickListener?.let { it(article) }
