@@ -1,6 +1,14 @@
 package com.example.newsline.ui.details
 
+import android.Manifest
+import android.content.Intent
+import android.content.Intent.getIntent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -11,7 +11,8 @@ import com.example.newsline.R
 import com.example.newsline.models.Article
 import kotlinx.android.synthetic.main.item_article.view.*
 
-class FavoriteNewsAdapter : RecyclerView.Adapter<FavoriteNewsAdapter.NewsViewHolder>() {
+class FavoriteNewsAdapter(private val clickListener: (Article) -> Unit) :
+    RecyclerView.Adapter<FavoriteNewsAdapter.NewsViewHolder>() {
 
     inner class NewsViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
@@ -43,10 +44,19 @@ class FavoriteNewsAdapter : RecyclerView.Adapter<FavoriteNewsAdapter.NewsViewHol
             article_image.clipToOutline = true
             article_title.text = article.title
             article_date.text = article.publishedAt
-            holder.itemView.icon_favorite.setImageResource(R.drawable.ic_favorite_icon)
+            icon_favorite.setImageResource(R.drawable.ic_favorite_icon)
 
             setOnClickListener {
                 onItemClickListener?.let { it(article) }
+            }
+
+            icon_favorite.setOnClickListener {
+                clickListener(article)
+                notifyItemChanged(position)
+            }
+
+            iconShare.setOnClickListener {
+                onIconShareClickListener?.let { it1 -> it1(article) }
             }
         }
 
@@ -58,9 +68,14 @@ class FavoriteNewsAdapter : RecyclerView.Adapter<FavoriteNewsAdapter.NewsViewHol
     }
 
     private var onItemClickListener: ((Article) -> Unit)? = null
+    private var onIconShareClickListener: ((Article) -> Unit)? = null
 
     fun setOnItemClickListener(listener: (Article) -> Unit) {
         onItemClickListener = listener
+    }
+
+    fun setOnIconShareClickListener(listener: (Article) -> Unit) {
+        onIconShareClickListener = listener
     }
 
 

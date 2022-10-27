@@ -1,5 +1,6 @@
 package com.example.newsline.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -73,6 +74,10 @@ class MainFragment : Fragment() {
             )
         }
 
+        newsAdapter.setOnIconShareClickListener {
+            shareToOtherApps(it.url)
+        }
+
 
         binding.refreshLayout.setOnRefreshListener {
             viewModel.getNews(Constants.RU)
@@ -97,14 +102,14 @@ class MainFragment : Fragment() {
 
             if (article.favorite) {
 
-                Log.i("Database info", "Currency deleted in database")
+                Log.i("Database info", "Article deleted in database")
                 article.favorite = false
                 viewModel.deleteFavoriteNews(article)
 
 
             } else {
 
-                Log.i("Database info", "Currency insert in database")
+                Log.i("Database info", "Article insert in database")
                 article.favorite = true
                 viewModel.saveFavoriteNews(article)
 
@@ -112,6 +117,17 @@ class MainFragment : Fragment() {
 
         }
 
+    }
+
+    private fun shareToOtherApps(message: String?) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, message)
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
     }
 
 

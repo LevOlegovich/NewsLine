@@ -47,6 +47,9 @@ class DetailsFragment : Fragment() {
             binding.iconBack.setOnClickListener {
                 findNavController().popBackStack()
             }
+            binding.iconShare.setOnClickListener {
+                shareToOtherApps(article.url)
+            }
         }
 
     }
@@ -97,6 +100,17 @@ class DetailsFragment : Fragment() {
                 binding.iconFavorite.setImageResource(R.drawable.ic_unfavorite_icon)
             }
         }
+    }
+
+    private fun shareToOtherApps(message: String?) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, message)
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
     }
 
 

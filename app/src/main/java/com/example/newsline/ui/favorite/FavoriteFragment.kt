@@ -1,5 +1,6 @@
 package com.example.newsline.ui.favorite
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,16 +10,19 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newsline.R
 import com.example.newsline.databinding.FragmentFavoriteBinding
+import com.example.newsline.models.Article
 import com.example.newsline.ui.adapters.FavoriteNewsAdapter
 import com.example.newsline.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FavoriteFragment : Fragment() {
@@ -42,6 +46,9 @@ class FavoriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         setupSwipeListener(binding.newsAdapter)
+        newsAdapter.setOnIconShareClickListener {
+            shareToOtherApps(it.url)
+        }
 
         newsAdapter.setOnItemClickListener {
             val bundle = bundleOf("article" to it)
@@ -83,7 +90,7 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        newsAdapter = FavoriteNewsAdapter()
+        newsAdapter = FavoriteNewsAdapter{ clickListener -> clickListenerForAdapter(clickListener) }
         news_adapter.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)
@@ -111,6 +118,32 @@ class FavoriteFragment : Fragment() {
         }
         val itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(rvShopList)
+    }
+
+
+    private fun clickListenerForAdapter(article: Article) {
+
+        viewLifecycleOwner.lifecycleScope.launch {
+
+            if (article.favorite) {
+                Log.i("Database info", "Article deleted in database")
+                article.favorite = false
+                viewModel.deleteFavoriteNews(article)
+            }
+
+        }
+
+    }
+
+    private fun shareToOtherApps(message: String?) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, message)
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
     }
 
 

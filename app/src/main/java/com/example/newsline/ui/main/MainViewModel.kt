@@ -43,17 +43,20 @@ class MainViewModel @Inject constructor(private val repository: NewsRepository) 
                 )
 
             if (response.isSuccessful) {
-                urlFavoreitesFilterForAdapter(response)
+
+                favoreitesFilterForAdapter(response)
                 response.body().let { res ->
                     newsLiveData.postValue(Resource.Success(res))
                 }
+
             } else {
                 newsLiveData.postValue(Resource.Error(message = "Error!!! Code: ${response.code()}"))
             }
         }
+        println(newsLiveData.value?.data?.articles.toString())
     }
 
-    private suspend fun urlFavoreitesFilterForAdapter(response: Response<NewsResponse>) {
+    private suspend fun favoreitesFilterForAdapter(response: Response<NewsResponse>) {
         val dataDB = repository.getFavoriteNews()
         response.body()?.articles?.forEach { article ->
             if (dataDB.any { it.url == article.url }) {
