@@ -1,5 +1,6 @@
 package com.example.newsline.data.api
 
+import android.content.Intent
 import com.example.newsline.data.db.ArticleDao
 import com.example.newsline.models.Article
 import javax.inject.Inject

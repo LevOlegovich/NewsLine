@@ -22,13 +22,12 @@ class FavoriteViewModel @Inject constructor(private val repository: NewsReposito
         favoriteNewsLiveData.postValue(Resource.Error(exeption.message))
     }
 
-    init {
-        getFavoriteNews()
-    }
 
     fun getFavoriteNews() = viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
         favoriteNewsLiveData.postValue(Resource.Loading())
-        val data = repository.getFavoriteNews()
+        val data = repository.getFavoriteNews() as ArrayList
+
+        data.reverse()
         favoriteNewsLiveData.postValue(Resource.Success(data))
         Log.d("checkData", "FavoriteViewModel data: ${data.size}")
     }

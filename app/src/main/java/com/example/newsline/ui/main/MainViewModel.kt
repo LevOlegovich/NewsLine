@@ -1,5 +1,6 @@
 package com.example.newsline.ui.main
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,17 +12,20 @@ import com.example.newsline.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import retrofit2.Response
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val repository: NewsRepository) : ViewModel() {
 
     val newsLiveData: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-
+    val favoritesNewsLiveData: MutableLiveData<List<Article>> = MutableLiveData()
     var newsPage = 1
     var pageSize = 50
+
 
     private val exeptionHandler = CoroutineExceptionHandler { _, exeption ->
         newsLiveData.postValue(Resource.Error(exeption.message))
@@ -30,6 +34,7 @@ class MainViewModel @Inject constructor(private val repository: NewsRepository) 
     init {
         getNews(Constants.RU)
     }
+
 
     fun getNews(countryCode: String) {
         newsLiveData.postValue(Resource.Loading())
@@ -43,28 +48,36 @@ class MainViewModel @Inject constructor(private val repository: NewsRepository) 
                 )
 
             if (response.isSuccessful) {
-
-                favoreitesFilterForAdapter(response)
                 response.body().let { res ->
                     newsLiveData.postValue(Resource.Success(res))
+
                 }
 
             } else {
                 newsLiveData.postValue(Resource.Error(message = "Error!!! Code: ${response.code()}"))
             }
         }
-        println(newsLiveData.value?.data?.articles.toString())
+
     }
 
-    private suspend fun favoreitesFilterForAdapter(response: Response<NewsResponse>) {
-        val dataDB = repository.getFavoriteNews()
-        response.body()?.articles?.forEach { article ->
-            if (dataDB.any { it.url == article.url }) {
-                article.favorite = true
+    suspend fun favoreitesFilterForAdapter(response: NewsResponse): NewsResponse {
+        viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
+            delay(500)
+            val dataDB = repository.getFavoriteNews()
+            if (dataDB.isNotEmpty()) {
+                response?.articles?.forEach { articleApi ->
+                    articleApi.favorite = dataDB.any { it.url == articleApi.url }
+                }
+            } else {
+                response?.articles?.forEach { articleApi ->
+                    articleApi.favorite = false
+                }
             }
-        }
+        }.join()
 
+        return response
     }
+
 
     fun deleteFavoriteNews(article: Article) =
         viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
@@ -80,6 +93,5 @@ class MainViewModel @Inject constructor(private val repository: NewsRepository) 
         }
 
     }
-
 
 }

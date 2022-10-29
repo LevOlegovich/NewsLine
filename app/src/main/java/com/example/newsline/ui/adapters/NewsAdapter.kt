@@ -51,8 +51,12 @@ class NewsAdapter(
             article_image.clipToOutline = true
             article_title.text = article.title
             article_date.text = article.publishedAt
-            if (article.favorite) icon_favorite.setImageResource(R.drawable.ic_favorite_icon)
-            else icon_favorite.setImageResource(R.drawable.ic_unfavorite_icon)
+            if (article.favorite){
+                icon_favorite.setImageResource(R.drawable.ic_favorite_icon)
+            }
+            else{
+                icon_favorite.setImageResource(R.drawable.ic_unfavorite_icon)
+            }
 
             setOnClickListener {
                 onItemClickListener?.let { it(article) }

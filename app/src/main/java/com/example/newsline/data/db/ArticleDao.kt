@@ -1,5 +1,6 @@
 package com.example.newsline.data.db
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.newsline.models.Article
 

@@ -16,19 +16,20 @@ import com.example.newsline.data.api.NewsRepository
 import com.example.newsline.models.Article
 import com.example.newsline.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(private val repository: NewsRepository) : ViewModel() {
 
-    val favoriteIconCheckLiveData: MutableLiveData<Resource<Boolean>> =
-        MutableLiveData(Resource.Success(false))
+    val favoriteNews = MutableLiveData<List<Article>>()
 
     private val exeptionHandler = CoroutineExceptionHandler { _, exeption ->
 
+    }
+
+    init {
+        favoriteNews.postValue(emptyList())
     }
 
     fun saveFavoriteNews(article: Article) =
@@ -53,6 +54,28 @@ class DetailsViewModel @Inject constructor(private val repository: NewsRepositor
             Log.d("checkData",
                 "DetailsFragment allFavorites after delete: ${repository.getFavoriteNews().size}")
         }
+
+    suspend fun checkFavorite(article: Article): Article {
+        viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
+            delay(500)
+            var dataDb = repository.getFavoriteNews()
+            if (dataDb.isNotEmpty()) {
+                dataDb.forEach {
+                    if (it.url == article.url) {
+                        article.favorite = true
+                        println("Совпадение с базой данных: id= ${it.id}")
+                        return@launch
+                    }
+                }
+            } else {
+                article.favorite = false
+                println("Совпадение с базой данных: id= ${dataDb.toString()}")
+            }
+
+        }.join()
+
+        return article
+    }
 
 
 }

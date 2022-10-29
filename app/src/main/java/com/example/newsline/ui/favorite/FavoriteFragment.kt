@@ -64,6 +64,7 @@ class FavoriteFragment : Fragment() {
                     pag_progress_bar.visibility = View.INVISIBLE
                     responce.data?.let {
                         newsAdapter.differ.submitList(it)
+
                     }
                 }
                 is Resource.Error -> {
@@ -90,7 +91,8 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        newsAdapter = FavoriteNewsAdapter{ clickListener -> clickListenerForAdapter(clickListener) }
+        newsAdapter =
+            FavoriteNewsAdapter { clickListener -> clickListenerForAdapter(clickListener) }
         news_adapter.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)

@@ -9,8 +9,10 @@ import android.view.ViewGroup
 import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -18,6 +20,9 @@ import com.example.newsline.R
 import com.example.newsline.databinding.FragmentDetailsBinding
 import com.example.newsline.models.Article
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -34,16 +39,26 @@ class DetailsFragment : Fragment() {
     ): View? {
         _binding = FragmentDetailsBinding.inflate(layoutInflater, container, false)
         return binding.root
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val articleArg = bundleArgs.article
-
+        initView(articleArg)
+        viewModel.favoriteNews.observe(viewLifecycleOwner) {
+            println("Hello DetailsFragment.observe: ${articleArg.favorite} ")
+            viewLifecycleOwner.lifecycleScope.launch {
+                chekDataAndInitIconFavorite(articleArg)
+                println("??????????    $articleArg")
+            }
+        }
         articleArg.let { article ->
-            initView(article)
+//            initView(article)
             visiteSiteOnClick(article)
             favoriteIconOnclick(article)
+
             binding.iconBack.setOnClickListener {
                 findNavController().popBackStack()
             }
@@ -51,6 +66,7 @@ class DetailsFragment : Fragment() {
                 shareToOtherApps(article.url)
             }
         }
+
 
     }
 
@@ -61,8 +77,19 @@ class DetailsFragment : Fragment() {
         binding.headerImage.clipToOutline = true
         binding.articleDetailsTitle.text = article.title
         binding.articleDetailsDecriptionText.text = article.description
-        if (article.favorite) {
+
+
+    }
+
+    private suspend fun chekDataAndInitIconFavorite(article: Article) {
+        val newArticle = viewModel.checkFavorite(article)
+
+        println("newArticle.favorite: " + newArticle.favorite)
+        if (newArticle.favorite) {
             binding.iconFavorite.setImageResource(R.drawable.ic_favorite_icon)
+        } else {
+            binding.iconFavorite.setImageResource(R.drawable.ic_unfavorite_icon)
+
         }
     }
 
