@@ -45,14 +45,13 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val articleArg = bundleArgs.article
+        var articleArg = bundleArgs.article
         initView(articleArg)
         viewModel.favoriteNews.observe(viewLifecycleOwner) {
             println("Hello DetailsFragment.observe: ${articleArg.favorite} ")
-            viewLifecycleOwner.lifecycleScope.launch {
-                chekDataAndInitIconFavorite(articleArg)
-                println("??????????    $articleArg")
-            }
+            chekDataAndInitIconFavorite(articleArg)
+
+
         }
         articleArg.let { article ->
 //            initView(article)
@@ -81,16 +80,20 @@ class DetailsFragment : Fragment() {
 
     }
 
-    private suspend fun chekDataAndInitIconFavorite(article: Article) {
-        val newArticle = viewModel.checkFavorite(article)
+    private fun chekDataAndInitIconFavorite(article: Article) {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            var newArticle = viewModel.checkFavorite(article)
 
-        println("newArticle.favorite: " + newArticle.favorite)
-        if (newArticle.favorite) {
-            binding.iconFavorite.setImageResource(R.drawable.ic_favorite_icon)
-        } else {
-            binding.iconFavorite.setImageResource(R.drawable.ic_unfavorite_icon)
+            println("??????????    $newArticle")
+            println("newArticle.favorite: " + newArticle.favorite)
+            if (newArticle.favorite) {
+                binding.iconFavorite.setImageResource(R.drawable.ic_favorite_icon)
+            } else {
+                binding.iconFavorite.setImageResource(R.drawable.ic_unfavorite_icon)
 
+            }
         }
+
     }
 
 

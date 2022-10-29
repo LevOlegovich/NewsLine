@@ -19,6 +19,7 @@ import com.example.newsline.R
 import com.example.newsline.databinding.FragmentFavoriteBinding
 import com.example.newsline.models.Article
 import com.example.newsline.ui.adapters.FavoriteNewsAdapter
+import com.example.newsline.ui.dialogfarg.DialogManager
 import com.example.newsline.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -57,6 +58,9 @@ class FavoriteFragment : Fragment() {
                 bundle
             )
         }
+        binding.deleteBtn.setOnClickListener {
+            showDialog()
+        }
 
         viewModel.favoriteNewsLiveData.observe(viewLifecycleOwner) { responce ->
             when (responce) {
@@ -64,6 +68,7 @@ class FavoriteFragment : Fragment() {
                     pag_progress_bar.visibility = View.INVISIBLE
                     responce.data?.let {
                         newsAdapter.differ.submitList(it)
+                        binding.savedNewsText.text = "Saved news: " + it.size
 
                     }
                 }
@@ -89,6 +94,17 @@ class FavoriteFragment : Fragment() {
 
 
     }
+
+    private fun showDialog() {
+        DialogManager.showDialog(requireActivity(),
+            object : DialogManager.Listener {
+                override fun onClick() {
+                    viewModel.deleteALLFavoriteNews()
+                }
+
+            })
+    }
+
 
     private fun initAdapter() {
         newsAdapter =

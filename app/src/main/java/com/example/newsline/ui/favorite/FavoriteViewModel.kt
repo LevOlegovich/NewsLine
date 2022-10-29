@@ -38,5 +38,10 @@ class FavoriteViewModel @Inject constructor(private val repository: NewsReposito
             getFavoriteNews()
         }
 
+    fun deleteALLFavoriteNews() =
+        viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
+            repository.deleteAllFavoriteNews()
+            getFavoriteNews()
+        }
 
 }

@@ -11,11 +11,16 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsline.R
+import com.example.newsline.data.api.NewsRepository
 import com.example.newsline.databinding.FragmentSearchBinding
+import com.example.newsline.models.NewsResponse
 import com.example.newsline.ui.adapters.SearchNewsAdapter
+import com.example.newsline.ui.favorite.FavoriteViewModel
+import com.example.newsline.ui.main.MainViewModel
 import com.example.newsline.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -23,6 +28,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -32,6 +38,10 @@ class SearchFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<SearchViewModel>()
+    private val viewModelOfMain by viewModels<MainViewModel>()
+
+    @Inject
+    lateinit var repository: NewsRepository
     lateinit var newsAdapter: SearchNewsAdapter
 
     override fun onCreateView(
@@ -59,6 +69,8 @@ class SearchFragment : Fragment() {
         var job: Job? = null
         ed_search.addTextChangedListener { text: Editable? ->
             job?.cancel()
+            binding.addAllToFavorite.setImageResource(R.drawable.ic_unfavorite_icon)
+
             job = MainScope().launch {
                 delay(500L)
                 text?.let {
@@ -72,12 +84,35 @@ class SearchFragment : Fragment() {
                 }
             }
         }
-        viewModel.searchNewsLiveData.observe(viewLifecycleOwner) { responce ->
+        viewModel.searchNewsLiveData.observe(viewLifecycleOwner)
+        { responce ->
             when (responce) {
                 is Resource.Success -> {
                     pag_search_progress_bar.visibility = View.INVISIBLE
-                    responce.data?.let {
-                        newsAdapter.differ.submitList(it.articles)
+                    responce.data?.let { newsResponse ->
+                        binding.addAllToFavorite.setOnClickListener {
+                            viewLifecycleOwner.lifecycleScope.launch {
+                                var data = repository.getFavoriteNews()
+                                var newsResponseAfterFilter = newsResponse.articles
+                                for (res in data) {
+
+                                    newsResponseAfterFilter =
+                                        newsResponseAfterFilter.filter { article ->
+                                            !(res.url.equals(article.url))
+                                        }
+                                }
+                                addAllSearchNews(newsResponse)
+                                Toast.makeText(requireContext(),
+                                    "Добавлено: ${newsResponseAfterFilter.size} из ${newsResponse.articles.size} ",
+                                    Toast.LENGTH_SHORT)
+                                    .show()
+
+                            }
+
+
+                        }
+                        binding.searchText.text = ("Search: ${newsResponse.articles.size}")
+                        newsAdapter.differ.submitList(newsResponse.articles)
                     }
                 }
                 is Resource.Error -> {
@@ -93,6 +128,16 @@ class SearchFragment : Fragment() {
                 }
             }
         }
+
+
+    }
+
+    private fun addAllSearchNews(newsResponse: NewsResponse) {
+        binding.addAllToFavorite.setImageResource(R.drawable.ic_favorite_icon)
+
+        newsResponse.articles.forEach {
+            viewModelOfMain.saveFavoriteNews(it)
+        }
     }
 
     private fun initAdapter() {
@@ -102,4 +147,6 @@ class SearchFragment : Fragment() {
             layoutManager = LinearLayoutManager(activity)
         }
     }
+
+
 }

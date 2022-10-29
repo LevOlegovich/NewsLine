@@ -56,25 +56,27 @@ class DetailsViewModel @Inject constructor(private val repository: NewsRepositor
         }
 
     suspend fun checkFavorite(article: Article): Article {
+        var newArticle = article
+        newArticle.favorite = false
         viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
-            delay(500)
+            delay(400)
             var dataDb = repository.getFavoriteNews()
+            var count = 0
             if (dataDb.isNotEmpty()) {
                 dataDb.forEach {
-                    if (it.url == article.url) {
-                        article.favorite = true
+                    count++
+                    if (it.url.equals(newArticle.url)) {
+                        newArticle.favorite = true
                         println("Совпадение с базой данных: id= ${it.id}")
-                        return@launch
+                    } else {
+                        println("Нет данных: ${newArticle.favorite}")
                     }
                 }
-            } else {
-                article.favorite = false
-                println("Совпадение с базой данных: id= ${dataDb.toString()}")
             }
-
+            println("count= $count")
         }.join()
 
-        return article
+        return newArticle
     }
 
 

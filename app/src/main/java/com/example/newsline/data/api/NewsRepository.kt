@@ -1,6 +1,7 @@
 package com.example.newsline.data.api
 
 import android.content.Intent
+import androidx.room.Delete
 import com.example.newsline.data.db.ArticleDao
 import com.example.newsline.models.Article
 import javax.inject.Inject
@@ -18,4 +19,6 @@ class NewsRepository @Inject constructor(
     suspend fun getFavoriteNews() = articleDao.getAllArticles()
     suspend fun addToFavotriteNews(article: Article) = articleDao.insert(article = article)
     suspend fun deleteFavoriteNews(article: Article) = articleDao.delete(article = article)
+
+    suspend fun deleteAllFavoriteNews() = articleDao.deleteAll()
 }

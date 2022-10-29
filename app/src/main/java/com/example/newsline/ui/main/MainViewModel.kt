@@ -65,11 +65,11 @@ class MainViewModel @Inject constructor(private val repository: NewsRepository) 
             delay(500)
             val dataDB = repository.getFavoriteNews()
             if (dataDB.isNotEmpty()) {
-                response?.articles?.forEach { articleApi ->
-                    articleApi.favorite = dataDB.any { it.url == articleApi.url }
+                response.articles.forEach { articleApi ->
+                    articleApi.favorite = dataDB.any { it.url.equals(articleApi.url) }
                 }
             } else {
-                response?.articles?.forEach { articleApi ->
+                response.articles.forEach { articleApi ->
                     articleApi.favorite = false
                 }
             }
@@ -82,13 +82,13 @@ class MainViewModel @Inject constructor(private val repository: NewsRepository) 
     fun deleteFavoriteNews(article: Article) =
         viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
             val data = repository.getFavoriteNews()
-            repository.deleteFavoriteNews(data.filter { it.url == article.url }.last())
+            repository.deleteFavoriteNews(data.filter { it.url.equals(article.url) }.last())
 
         }
 
     fun saveFavoriteNews(article: Article) = viewModelScope.launch(Dispatchers.IO) {
         val data = repository.getFavoriteNews()
-        if (data.none { it.url == article.url }) {
+        if (data.none { it.url.equals(article.url) }) {
             repository.addToFavotriteNews(article)
         }
 
