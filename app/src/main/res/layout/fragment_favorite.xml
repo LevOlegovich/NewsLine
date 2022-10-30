@@ -12,8 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/arial_rounded_mt_bold"
-        android:text="@string/Favorite_news"
-        android:textColor="@color/red"
+        android:text="@string/favorite_news"
+        android:textColor="@color/dark_green"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,9 +25,11 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="15dp"
         android:layout_marginTop="42dp"
-        android:text="@string/Saved_news"
+        android:paddingEnd="5dp"
+        android:text="@string/saved_news"
         android:textColor="@color/grayBlack"
         android:textSize="16sp"
+        android:textStyle="bold|italic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_text" />
 

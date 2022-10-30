@@ -12,4 +12,8 @@
     <color name="teal">#1C728C</color>
     <color name="red">#C8281D</color>
     <color name="lightGrey">#F2F2F2</color>
+    <color name="dark_grey_100">#8F8E8E</color>
+    <color name="dark_grey_50">#AEAEAE</color>
+
+
 </resources>

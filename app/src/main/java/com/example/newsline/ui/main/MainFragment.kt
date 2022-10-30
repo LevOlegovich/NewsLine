@@ -97,10 +97,14 @@ class MainFragment : Fragment() {
 
 
     private fun showNews(response: NewsResponse) {
+
         var updatedResponse = response
+        newsAdapter.setViewType(NewsAdapter.TYPE_LOADING)
         newsAdapter.differ.submitList(response.articles)
+
         viewLifecycleOwner.lifecycleScope.launch {
             newsAdapter.differ.submitList(viewModel.favoreitesFilterForAdapter(updatedResponse).articles)
+            newsAdapter.setViewType(NewsAdapter.TYPE_SUCCESS)
             newsAdapter.notifyDataSetChanged()
         }
     }
@@ -143,5 +147,6 @@ class MainFragment : Fragment() {
         val shareIntent = Intent.createChooser(sendIntent, null)
         startActivity(shareIntent)
     }
+
 
 }

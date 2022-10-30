@@ -1,24 +1,22 @@
 package com.example.newsline.ui.adapters
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.newsline.R
 import com.example.newsline.models.Article
-import kotlinx.android.synthetic.main.fragment_details.view.*
 import kotlinx.android.synthetic.main.item_article.view.*
-import kotlinx.android.synthetic.main.item_article.view.icon_favorite
 
 class NewsAdapter(
     private val clickListener: (Article) -> Unit,
 ) :
     RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
+
+    private var myViewType = TYPE_LOADING
 
     inner class NewsViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
@@ -51,12 +49,15 @@ class NewsAdapter(
             article_image.clipToOutline = true
             article_title.text = article.title
             article_date.text = article.publishedAt
-            if (article.favorite){
-                icon_favorite.setImageResource(R.drawable.ic_favorite_icon)
+            if (getItemViewType(position) == TYPE_LOADING) {
+                setIconFavorite(article)
+                progressBarInItem.visibility = View.VISIBLE
             }
-            else{
-                icon_favorite.setImageResource(R.drawable.ic_unfavorite_icon)
+            if (getItemViewType(position) == TYPE_SUCCESS) {
+                setIconFavorite(article)
+                progressBarInItem.visibility = View.INVISIBLE
             }
+
 
             setOnClickListener {
                 onItemClickListener?.let { it(article) }
@@ -75,8 +76,24 @@ class NewsAdapter(
 
     }
 
+    private fun View.setIconFavorite(article: Article) {
+        if (article.favorite) {
+            icon_favorite.setImageResource(R.drawable.ic_favorite_icon)
+
+
+        } else {
+            icon_favorite.setImageResource(R.drawable.ic_unfavorite_icon)
+
+
+        }
+    }
+
     override fun getItemCount(): Int {
         return differ.currentList.size
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return myViewType
     }
 
     private var onItemClickListener: ((Article) -> Unit)? = null
@@ -88,6 +105,17 @@ class NewsAdapter(
 
     fun setOnIconShareClickListener(listener: (Article) -> Unit) {
         onIconShareClickListener = listener
+    }
+
+    fun setViewType(viewType: Int) {
+        myViewType = viewType
+    }
+
+    companion object {
+        const val TYPE_LOADING = 1
+
+        const val TYPE_SUCCESS = 2
+
     }
 
 

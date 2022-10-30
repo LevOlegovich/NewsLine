@@ -44,6 +44,7 @@ class FavoriteNewsAdapter(private val clickListener: (Article) -> Unit) :
             article_image.clipToOutline = true
             article_title.text = article.title
             article_date.text = article.publishedAt
+            progressBarInItem.visibility = View.INVISIBLE
             icon_favorite.setImageResource(R.drawable.ic_favorite_icon)
 
             setOnClickListener {

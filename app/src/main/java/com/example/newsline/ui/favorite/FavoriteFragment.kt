@@ -68,7 +68,9 @@ class FavoriteFragment : Fragment() {
                     pag_progress_bar.visibility = View.INVISIBLE
                     responce.data?.let {
                         newsAdapter.differ.submitList(it)
-                        binding.savedNewsText.text = "Saved news: " + it.size
+                        val text = resources.getString(R.string.saved_news) + " ${it.size}"
+                        binding.savedNewsText.text = text
+
 
                     }
                 }

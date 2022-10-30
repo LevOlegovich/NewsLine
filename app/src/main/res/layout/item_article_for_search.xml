@@ -7,7 +7,7 @@
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="12dp"
     android:background="@drawable/bg_image_10"
-    android:backgroundTint="@color/lightGrey">
+    android:backgroundTint="@color/dark_grey_50">
 
     <ImageView
         android:id="@+id/article_image"

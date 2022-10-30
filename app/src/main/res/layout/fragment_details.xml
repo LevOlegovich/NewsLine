@@ -50,6 +50,16 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/icon_share" />
 
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="37dp"
+                    android:layout_height="26dp"
+
+                    app:layout_constraintBottom_toBottomOf="@+id/icon_favorite"
+                    app:layout_constraintEnd_toEndOf="@+id/icon_favorite"
+                    app:layout_constraintStart_toStartOf="@+id/icon_favorite" />
+
                 <ImageView
                     android:id="@+id/icon_share"
                     android:layout_width="wrap_content"

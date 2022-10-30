@@ -81,11 +81,14 @@ class DetailsFragment : Fragment() {
     }
 
     private fun chekDataAndInitIconFavorite(article: Article) {
+
+
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             var newArticle = viewModel.checkFavorite(article)
 
             println("??????????    $newArticle")
             println("newArticle.favorite: " + newArticle.favorite)
+            binding.progressBar.visibility = View.INVISIBLE
             if (newArticle.favorite) {
                 binding.iconFavorite.setImageResource(R.drawable.ic_favorite_icon)
             } else {

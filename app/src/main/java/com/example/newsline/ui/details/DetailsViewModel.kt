@@ -59,7 +59,7 @@ class DetailsViewModel @Inject constructor(private val repository: NewsRepositor
         var newArticle = article
         newArticle.favorite = false
         viewModelScope.launch(Dispatchers.IO + exeptionHandler) {
-            delay(400)
+            delay(250)
             var dataDb = repository.getFavoriteNews()
             var count = 0
             if (dataDb.isNotEmpty()) {

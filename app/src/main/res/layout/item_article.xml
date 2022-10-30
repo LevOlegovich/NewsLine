@@ -7,7 +7,7 @@
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="12dp"
     android:background="@drawable/bg_image_10"
-    android:backgroundTint="@color/lightGrey">
+    android:backgroundTint="@color/dark_grey_50">
 
     <ImageView
         android:id="@+id/article_image"
@@ -62,6 +62,16 @@
         app:layout_constraintStart_toEndOf="@+id/article_info"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ProgressBar
+        android:id="@+id/progressBarInItem"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="37dp"
+        android:layout_height="26dp"
+        app:layout_constraintBottom_toBottomOf="@+id/article_info"
+        app:layout_constraintEnd_toStartOf="@+id/iconShare"
+        app:layout_constraintStart_toEndOf="@+id/article_info"
+        app:layout_constraintTop_toTopOf="@+id/article_info" />
+
     <ImageView
         android:id="@+id/iconShare"
         android:layout_width="35dp"
@@ -78,6 +88,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
