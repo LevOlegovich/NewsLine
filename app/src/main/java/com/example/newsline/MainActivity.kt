@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.newsline.databinding.ActivityMainBinding
@@ -20,6 +22,9 @@ class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
 
+    lateinit var navController: NavController
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -31,8 +36,13 @@ class MainActivity : AppCompatActivity() {
             delay(2000)
             _binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
+
+            val navHost =
+                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            navController = navHost.navController
+
             bottom_nav_menu.setupWithNavController(
-                navController = nav_host_fragment.findNavController()
+                navController = navController
             )
         }
     }

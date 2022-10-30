@@ -19,7 +19,6 @@ import com.example.newsline.data.api.NewsRepository
 import com.example.newsline.databinding.FragmentSearchBinding
 import com.example.newsline.models.NewsResponse
 import com.example.newsline.ui.adapters.SearchNewsAdapter
-import com.example.newsline.ui.favorite.FavoriteViewModel
 import com.example.newsline.ui.main.MainViewModel
 import com.example.newsline.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint

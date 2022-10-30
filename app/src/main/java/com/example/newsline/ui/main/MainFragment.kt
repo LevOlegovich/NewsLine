@@ -1,6 +1,5 @@
 package com.example.newsline.ui.main
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -23,9 +22,7 @@ import com.example.newsline.utils.Constants
 import com.example.newsline.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.internal.notify
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {

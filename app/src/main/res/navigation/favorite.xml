@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/favorite"
+    app:startDestination="@id/favoriteFragment">
+
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.example.newsline.ui.favorite.FavoriteFragment"
+        android:label="fragment_favorite"
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_favoriteFragment_to_detailsFragment"
+            app:destination="@id/detailsFragmentFavorite" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragmentFavorite"
+        android:name="com.example.newsline.ui.details.DetailsFragment"
+        android:label="DetailsFragment" >
+        <argument
+            android:name="article"
+            app:argType="com.example.newsline.models.Article" />
+    </fragment>
+</navigation>
