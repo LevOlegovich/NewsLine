@@ -1,4 +1,4 @@
-��#� �N�e�w�s�L�i�n�e�
+NewsLine. Итоговая версия: ветка "newsLine9".
 
 ![news1](https://user-images.githubusercontent.com/104260685/233573361-0d485714-af82-4e3d-b729-cb7f0a2f30df.png)
 ![news2](https://user-images.githubusercontent.com/104260685/233573387-8484b92c-5626-498c-b1ac-a9e1248f48dd.png)
